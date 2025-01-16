@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
-import AuthLayout from "@/components/layouts/AuthLayout";
+import AuthLayout from "@/components/layouts/PublicLayout";
 import SignInForm from "./_components/SignInForm";
 import Google from "@/assets/svg/google.svg";
 
