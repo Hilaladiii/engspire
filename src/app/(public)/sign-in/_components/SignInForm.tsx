@@ -5,6 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
 import Button from "@/components/elements/Button";
+import ShowPassword from "@/assets/svg/showPassword.svg";
+import HiddenPassword from "@/assets/svg/hiddenPassword.svg";
+import { useState } from "react";
 
 const signInSchema = z.object({
   email: z.string().email("Email tidak valid"),
@@ -14,6 +17,7 @@ const signInSchema = z.object({
 type TSignIn = z.infer<typeof signInSchema>;
 
 export default function SignInForm() {
+  const [show, setShow] = useState<boolean>(false);
   const {
     register,
     formState: { errors },
@@ -46,14 +50,16 @@ export default function SignInForm() {
         errors={errors.password}
         label="Kata Sandi"
         placeholder="Masukkan kata sandi"
-        type="password"
+        type={show ? "text" : "password"}
+        icon={show ? <ShowPassword /> : <HiddenPassword />}
+        onClickIcon={() => setShow((prev) => !prev)}
         fullWidth
       />
       <div className="flex justify-between">
         <CheckBox id="remind" label="Ingat saya" />
         <Link
           href="/forgot-password"
-          className="text-lightningBlue font-medium"
+          className="font-medium text-lightningBlue"
         >
           Lupa Kata Sandi
         </Link>

@@ -4,7 +4,10 @@ import Input from "@/components/elements/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
+import ShowPassword from "@/assets/svg/showPassword.svg";
+import HiddenPassword from "@/assets/svg/hiddenPassword.svg";
 import { z } from "zod";
+import { useState } from "react";
 
 const signUpSchema = z
   .object({
@@ -21,6 +24,13 @@ const signUpSchema = z
 type TSignUp = z.infer<typeof signUpSchema>;
 
 export default function SignUpForm() {
+  const [show, setShow] = useState<{
+    password: boolean;
+    confirmPassword: boolean;
+  }>({
+    password: false,
+    confirmPassword: false,
+  });
   const {
     register,
     formState: { errors },
@@ -61,7 +71,11 @@ export default function SignUpForm() {
         errors={errors.password}
         label="Kata Sandi"
         placeholder="Masukkan kata sandi"
-        type="password"
+        type={show.password ? "text" : "password"}
+        icon={show.password ? <ShowPassword /> : <HiddenPassword />}
+        onClickIcon={() =>
+          setShow((prev) => ({ ...prev, password: !prev.password }))
+        }
         fullWidth
       />
       <Input
@@ -70,14 +84,21 @@ export default function SignUpForm() {
         errors={errors.confirmPassword}
         label="Konfirmasi Kata Sandi"
         placeholder="Masukkan konfirmasi kata sandi"
-        type="password"
+        type={show.confirmPassword ? "text" : "password"}
+        icon={show.confirmPassword ? <ShowPassword /> : <HiddenPassword />}
+        onClickIcon={() =>
+          setShow((prev) => ({
+            ...prev,
+            confirmPassword: !prev.confirmPassword,
+          }))
+        }
         fullWidth
       />
       <div className="flex justify-between">
         <CheckBox id="remind" label="Ingat saya" />
         <Link
           href="/forgot-password"
-          className="text-lightningBlue font-medium"
+          className="font-medium text-lightningBlue"
         >
           Lupa Kata Sandi
         </Link>

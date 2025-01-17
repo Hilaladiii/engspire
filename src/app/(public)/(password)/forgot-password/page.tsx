@@ -26,6 +26,7 @@ export default function ForgotPasswordPage() {
   const { setShow, setContent } = useModal();
 
   const onSubmit: SubmitHandler<TForgotPassword> = (data) => {
+    console.log(data);
     setShow(true);
     setContent(<ContentModalSendEmail />);
   };
