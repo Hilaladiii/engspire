@@ -7,7 +7,7 @@ import { useModal } from "@/context/ModalContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import ContentModalSuccessReset from "./_components/ContentModalSuccessReset";
+import { CONTENT_MODAL_SUCCESS_RESET } from "@/constants";
 
 const newPasswordSchema = z
   .object({
@@ -31,10 +31,14 @@ export default function ResetPassword() {
   } = useForm<TNewPassword>({
     resolver: zodResolver(newPasswordSchema),
   });
-  const { setContent, setShow } = useModal();
+  const { handleModal } = useModal();
   const onSubmit: SubmitHandler<TNewPassword> = (data) => {
-    setContent(<ContentModalSuccessReset />);
-    setShow(true);
+    console.log(data);
+    handleModal({
+      show: true,
+      type: "template",
+      modalTemplate: CONTENT_MODAL_SUCCESS_RESET,
+    });
   };
   return (
     <PublicLayout

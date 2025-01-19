@@ -3,11 +3,11 @@
 import Button from "@/components/elements/Button";
 import Input from "@/components/elements/Input";
 import PublicLayout from "@/components/layouts/PublicLayout";
+import { CONTENT_MODAL_SEND_EMAIL } from "@/constants";
 import { useModal } from "@/context/ModalContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import ContentModalSendEmail from "./_components/ContentModalSendEmail";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Email tidak valid"),
@@ -23,12 +23,15 @@ export default function ForgotPasswordPage() {
   } = useForm<TForgotPassword>({
     resolver: zodResolver(forgotPasswordSchema),
   });
-  const { setShow, setContent } = useModal();
+  const { handleModal } = useModal();
 
   const onSubmit: SubmitHandler<TForgotPassword> = (data) => {
     console.log(data);
-    setShow(true);
-    setContent(<ContentModalSendEmail />);
+    handleModal({
+      show: true,
+      type: "template",
+      modalTemplate: CONTENT_MODAL_SEND_EMAIL,
+    });
   };
   return (
     <PublicLayout
