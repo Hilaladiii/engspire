@@ -1,24 +1,36 @@
-import Modal from "@/components/fragments/Modal";
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import Modal, { IModalTemplate } from "@/components/fragments/Modal";
+import { createContext, useContext, useState, ReactNode } from "react";
 
 interface ModalContextType {
+  handleModal: ({ show, content, type }: IModalData) => void;
+}
+
+interface IModalData {
   show: boolean;
-  setShow: (value: boolean) => void;
-  content: ReactNode;
-  setContent: (content: ReactNode) => void;
+  content?: ReactNode;
+  type?: "template" | "custom";
+  modalTemplate?: IModalTemplate;
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
-
 export function ModalProvider({ children }: { children: ReactNode }) {
-  const [show, setShow] = useState<boolean>(false);
-  const [content, setContent] = useState<ReactNode>(null);
+  const [modalData, setModalData] = useState<IModalData>({
+    show: false,
+  });
+  const handleModal = (data: IModalData) => {
+    setModalData(data);
+  };
   return (
-    <ModalContext value={{ show, setShow, content, setContent }}>
+    <ModalContext value={{ handleModal }}>
       {children}
-      {show && (
-        <Modal show={show} setShow={setShow}>
-          {content}
+      {modalData.show && (
+        <Modal
+          show={modalData.show}
+          setShow={(show) => setModalData({ ...modalData, show })}
+          type={modalData.type}
+          templateData={modalData.modalTemplate}
+        >
+          {modalData.content}
         </Modal>
       )}
     </ModalContext>
